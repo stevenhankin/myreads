@@ -15,7 +15,7 @@ function BookList(props) {
           <Book
             width={128}
             height={193}
-            imageUrl={`url('${book.imageLinks.thumbnail}')`}
+            imageUrl={book.imageLinks && `url('${book.imageLinks.thumbnail}')`}
             title={book.title}
             authors={book.authors}
           />

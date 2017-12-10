@@ -11,10 +11,12 @@ class SearchPage extends React.Component {
   handleChange = event => {
     const newText = event.target.value.trim();
     this.setState({ searchText: newText });
-    search(newText).then(books => {
-      console.dir(books);
-      this.setState({ books });
-    });
+    if (newText.length > 0) {
+      search(newText).then(books => {
+        console.dir(books);
+        this.setState({ books });
+      });
+    }
   };
   render() {
     return (
