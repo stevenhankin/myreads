@@ -14,13 +14,15 @@ To get started developing right away:
 ## Component Layout
 
 * Router
-  * BookView (/)
+  * BookView (path='/', Creates BookShelf for 'currentlyReading','wantToRead','read')
     * BookListTitle
     * BookShelf
       * BookList
         * Book
   * SearchPage (/search)
     * Link (to Home)
+    * BookList
+      * Book
 
 ## What You're Getting
 

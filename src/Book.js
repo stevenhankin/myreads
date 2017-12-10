@@ -1,35 +1,59 @@
 import React from 'react';
+import { update } from './BooksAPI';
 
-function Book(props) {
-  return (
-    <div className="book">
-      <div className="book-top">
-        <div
-          className="book-cover"
-          style={{
-            width: props.width,
-            height: props.height,
-            backgroundImage: props.imageUrl
-          }}
-        />
-        <div className="book-shelf-changer">
-          <select>
-            <option value="none" disabled>
-              Move to...
-            </option>
-            <option value="currentlyReading">Currently Reading</option>
-            <option value="wantToRead">Want to Read</option>
-            <option value="read">Read</option>
-            <option value="none">None</option>
-          </select>
+class Book extends React.Component {
+  /*
+  Book is a Controlled Component to handle state changes of the SELECT element
+  See https://reactjs.org/docs/forms.html#the-select-tag
+  */
+  constructor(props) {
+    super(props);
+    // this.state = {
+    //   selectedShelf: 'none'
+    // };
+  }
+
+  handleChange = event => {
+    const shelf = event.target.value;
+    this.setState({ shelf });
+    update(this.props.book, shelf).then(() => {
+      console.log('updated!');
+    });
+  };
+
+  render() {
+    const formatUrl = book =>
+      book.imageLinks && `url("${encodeURI(book.imageLinks.thumbnail)}")`;
+    return (
+      <div className="book">
+        <div className="book-top">
+          <div
+            className="book-cover"
+            style={{
+              width: 128,
+              height: 193,
+              backgroundImage: formatUrl(this.props.book)
+            }}
+          />
+          <div className="book-shelf-changer">
+            <select value={this.props.book.shelf} onChange={this.handleChange}>
+              <option value="none" disabled>
+                Move to...
+              </option>
+              <option value="currentlyReading">Currently Reading</option>
+              <option value="wantToRead">Want to Read</option>
+              <option value="read">Read</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+        </div>
+        <div className="book-title">{this.props.book.title}</div>
+        <div className="book-authors">
+          {this.props.book.authors && this.props.book.authors.join(', ')}
         </div>
       </div>
-      <div className="book-title">{props.title}</div>
-      <div className="book-authors">
-        {props.authors && props.authors.join(', ')}
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Book;

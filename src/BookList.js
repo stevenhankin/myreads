@@ -12,13 +12,7 @@ function BookList(props) {
       })
       .map(book => (
         <li key={book.id}>
-          <Book
-            width={128}
-            height={193}
-            imageUrl={book.imageLinks && `url('${book.imageLinks.thumbnail}')`}
-            title={book.title}
-            authors={book.authors}
-          />
+          <Book book={book} width={128} height={193} />
         </li>
       ));
   }
