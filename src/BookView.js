@@ -2,6 +2,7 @@ import React from 'react';
 import { getAll } from './BooksAPI';
 import BookListTitle from './BookListTitle';
 import BookShelf from './BookShelf';
+import { Link } from 'react-router-dom';
 
 class BookView extends React.Component {
   constructor(props) {
@@ -40,9 +41,7 @@ class BookView extends React.Component {
           </div>
         </div>
         <div className="open-search">
-          <a onClick={() => this.setState({ showSearchPage: true })}>
-            Add a book
-          </a>
+          <Link to="/search">Add a book</Link>
         </div>
       </div>
     );
