@@ -4,7 +4,7 @@ import Book from './Book';
 function BookList(props) {
   let listItems;
   /* Only display books once some are retrieved for the shelf */
-  if (props.books.length) {
+  if (props.books && props.books.length) {
     listItems = props.books
       .filter(book => {
         /* Only display books that are assigned to this shelf */
