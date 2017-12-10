@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 // import * as BooksAPI from './BooksAPI'
-import './App.css'
-import  SearchPage from './SearchPage'
-import  BookList from './BookList'
+import './App.css';
+import SearchPage from './SearchPage';
+import BookView from './BookView';
 
 class BooksApp extends React.Component {
   state = {
@@ -13,19 +13,15 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     showSearchPage: false
-  }
+  };
 
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <SearchPage/>
-        ) : (
-          <BookList/>
-        )}
+        {this.state.showSearchPage ? <SearchPage /> : <BookView />}
       </div>
-    )
+    );
   }
 }
 
-export default BooksApp
+export default BooksApp;
