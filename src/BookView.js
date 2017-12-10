@@ -8,27 +8,36 @@ class BookView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shelves: [
-        { name: 'currentlyReading', title: 'Currently Reading', books: {} },
-        { name: 'wantToRead', title: 'Want To Read', books: {} },
-        { name: 'read', title: 'Read', books: {} }
-      ]
+      shelves: {
+        currentlyReading: { title: 'Currently Reading', books: [] },
+        wantToRead: { title: 'Want To Read', books: [] },
+        read: { title: 'Read', books: [] }
+      }
     };
   }
 
   componentDidMount() {
     getAll().then(books => {
-      const newShelves = this.state.shelves.map(shelf => {
-        const bookList = books.filter(book => book.shelf === shelf.name);
-        shelf.books = bookList;
-        return shelf;
-      });
-      this.setState({ shelves: newShelves });
+      const shelves = this.state.shelves;
+      books.map(book => shelves[book.shelf].books.push(book));
+      this.setState({ shelves });
     });
   }
 
   moveBook = (bookId, fromShelf, toShelf) => {
-    // TODO
+    let shelves = this.state.shelves;
+    const bookIdx = shelves[fromShelf].books.findIndex(
+      book => book.id === bookId
+    );
+    shelves[toShelf].books.push(shelves[fromShelf].books[bookIdx]);
+    console.log('Now have', shelves[toShelf].books);
+
+    shelves[fromShelf].books = shelves[fromShelf].books.filter(
+      book => book.id !== bookId
+    );
+    console.log('shelves!!', shelves);
+    this.setState({ shelves });
+    console.log(`move book ${bookId} from ${fromShelf} to ${toShelf}`);
   };
 
   render() {
@@ -37,12 +46,13 @@ class BookView extends React.Component {
         <BookListTitle />
         <div className="list-books-content">
           <div>
-            {this.state.shelves.map(shelf => (
+            {Object.keys(this.state.shelves).map(shelf => (
               <BookShelf
-                key={shelf.name}
-                shelf={shelf.name}
-                bookShelfTitle={shelf.title}
-                books={shelf.books}
+                key={shelf}
+                shelf={shelf}
+                bookShelfTitle={this.state.shelves[shelf].title}
+                books={this.state.shelves[shelf].books}
+                moveBook={this.moveBook}
               />
             ))}
           </div>

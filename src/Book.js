@@ -18,6 +18,7 @@ class Book extends React.Component {
     this.setState({ shelf });
     update(this.props.book, shelf).then(() => {
       console.log('updated!');
+      this.props.moveBook(this.props.book.id, this.props.book.shelf, shelf);
     });
   };
 
