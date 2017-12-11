@@ -1,8 +1,6 @@
 import React from 'react';
-import { getAll } from './BooksAPI';
 import BookListTitle from './BookListTitle';
 import BookShelf from './BookShelf';
-import { Link } from 'react-router-dom';
 import { update } from './BooksAPI';
 import PropTypes from 'prop-types';
 
@@ -14,19 +12,6 @@ class BookView extends React.Component {
     };
   }
 
-  componentDidMount() {
-    getAll().then(books => {
-      const shelves = this.state.shelves;
-      console.dir(books);
-      books.map(book => {
-        if (shelves[book.shelf]) {
-          shelves[book.shelf].books.push(book);
-        }
-      });
-      this.setState({ shelves });
-    });
-  }
-
   /*
    Book is being moved to another shelf
    Save the change and update view
@@ -35,8 +20,10 @@ class BookView extends React.Component {
     const shelves = this.state.shelves;
 
     const reassignShelf = (book, fromShelfName, toShelfName) => {
-      const fromShelf = shelves[fromShelfName];
-      const toShelf = shelves[toShelfName];
+      const fromShelf = shelves.find(
+        shelf => shelf.shelfFilter === fromShelfName
+      );
+      const toShelf = shelves.find(shelf => shelf.shelfFilter === toShelfName);
       // Add book to new shelf
       if (toShelf) {
         book.shelf = toShelfName;
@@ -64,25 +51,33 @@ class BookView extends React.Component {
     );
   };
 
+  // /*
+  // Return the shelf name for the specified book.
+  // This is executed at this level to access ALL bookshelves
+  // but is delegated to the individual book where the shelf can be changed.
+  // It's used for highlighting the current shelf on the Book dropdown
+  // on the Search Page
+  // */
+  // whichShelf = (book) => {
+  //   this.props.books.find()
+  // };
+
   render() {
+    console.log('RENDER', this.state);
     return (
       <div className="list-books">
         <BookListTitle />
         <div className="list-books-content">
           <div>
-            {Object.keys(this.state.shelves).map(shelf => (
+            {this.state.shelves.map(shelf => (
               <BookShelf
-                key={shelf}
+                key={shelf.title}
                 shelf={shelf}
-                bookShelfTitle={this.state.shelves[shelf].title}
-                books={this.state.shelves[shelf].books}
+                books={this.props.books}
                 moveBook={this.moveBook}
               />
             ))}
           </div>
-        </div>
-        <div className="open-search">
-          <Link to="/search">Add a book</Link>
         </div>
       </div>
     );
@@ -90,7 +85,8 @@ class BookView extends React.Component {
 }
 
 BookView.propTypes = {
-  shelves: PropTypes.object.isRequired
+  shelves: PropTypes.arrayOf(PropTypes.object).isRequired,
+  books: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default BookView;

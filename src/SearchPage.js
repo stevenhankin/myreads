@@ -4,24 +4,25 @@ import { Link } from 'react-router-dom';
 import BookView from './BookView';
 import { search } from './BooksAPI';
 
-const shelves = {
-  none: { title: 'Library', books: [] }
-};
+const shelves = [{ title: 'Library', shelfFilter: undefined, books: [] }];
 
 class SearchPage extends React.Component {
   /*
   SearchPage is a Controlled Component
   */
-  state = { searchText: '', books: [] };
+  state = { searchText: '', shelves, books: [] };
 
   handleChange = event => {
     const newText = event.target.value.trim();
     this.setState({ searchText: newText });
     if (newText.length > 0) {
       search(newText).then(books => {
-        // console.log('Setting books', books);
         // books.map((book) => shelves.none.books books;
-        this.setState({ shelves });
+        if (books.length > 0) {
+          // shelves[0].books = books;
+          this.setState({ books });
+          console.log('state', this.state);
+        }
       });
     }
   };
@@ -51,7 +52,7 @@ class SearchPage extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <BookView shelves={shelves} />
+          <BookView shelves={this.state.shelves} books={this.state.books} />
         </div>
       </div>
     );

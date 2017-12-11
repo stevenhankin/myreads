@@ -2,11 +2,26 @@ import React from 'react';
 import BookList from './BookList';
 import PropTypes from 'prop-types';
 
+// const shelves = [
+//   { title: 'Currently Reading', shelfFilter: 'currentlyReading', books: [] },
+//   { title: 'Want To Read', shelfFilter: 'wantToRead', books: [] },
+//   { title: 'Read', shelfFilter: 'read', books: [] }
+// ];
+// shelfFilter={shelf}
+// bookShelfTitle={this.state.shelves[shelf].title}
+// books={this.state.shelves[shelf].books}
+
 class BookShelf extends React.Component {
+  componentWillReceiveProps(newProps) {
+    // const shelf = this.props.shelf;
+    console.log('BOOKS', newProps.books);
+    // , this.props.books);
+  }
+
   render() {
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{this.props.bookShelfTitle}</h2>
+        <h2 className="bookshelf-title">{this.props.shelf.title}</h2>
         <div className="bookshelf-books">
           <BookList
             shelf={this.props.shelf}
@@ -20,8 +35,8 @@ class BookShelf extends React.Component {
 }
 
 BookShelf.propTypes = {
-  bookShelfTitle: PropTypes.string.isRequired,
-  books: PropTypes.array.isRequired
+  shelf: PropTypes.object.isRequired,
+  books: PropTypes.array
 };
 
 export default BookShelf;

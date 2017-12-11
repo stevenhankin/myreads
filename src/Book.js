@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Book extends React.Component {
   /*
@@ -10,6 +11,11 @@ class Book extends React.Component {
     const shelf = event.target.value;
     this.setState({ shelf });
     this.props.moveBook(this.props.book, this.props.book.shelf, shelf);
+  };
+
+  getShelf = event => {
+    console.log('getShelf', this.props.book.shelf);
+    return this.props.book.shelf;
   };
 
   render() {
@@ -27,7 +33,7 @@ class Book extends React.Component {
             }}
           />
           <div className="book-shelf-changer">
-            <select value={this.props.book.shelf} onChange={this.handleChange}>
+            <select value={this.getShelf} onChange={this.handleChange}>
               <option value="none" disabled>
                 Move to...
               </option>
@@ -46,5 +52,12 @@ class Book extends React.Component {
     );
   }
 }
+
+Book.propTypes = {
+  book: PropTypes.object.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  moveBook: PropTypes.func.isRequired
+};
 
 export default Book;
