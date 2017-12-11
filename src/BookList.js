@@ -3,14 +3,14 @@ import Book from './Book';
 
 function BookList(props) {
   let listItems;
+  console.log('BookList', props.books);
   /* Only display books once some are retrieved for the shelf */
-  console.log('props.books', props.books);
   if (props.books && props.books.length) {
     listItems = props.books
       .filter(book => {
-        console.log('book.shelf', book.shelf);
-        console.log('props.shelf ', props.shelf);
         /* Only display books that are assigned to this shelf */
+        console.log('book', book.shelf);
+        console.log('props', props.shelf);
         return book.shelf === props.shelf;
       })
       .map(book => (

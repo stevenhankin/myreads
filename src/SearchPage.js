@@ -1,23 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import BookList from './BookList';
+// import BookList from './BookList';
+import BookView from './BookView';
 import { search } from './BooksAPI';
+
+const shelves = {
+  none: { title: 'Library', books: [] }
+};
 
 class SearchPage extends React.Component {
   /*
   SearchPage is a Controlled Component
   */
   state = { searchText: '', books: [] };
+
   handleChange = event => {
     const newText = event.target.value.trim();
     this.setState({ searchText: newText });
     if (newText.length > 0) {
       search(newText).then(books => {
-        console.dir(books);
-        this.setState({ books });
+        // console.log('Setting books', books);
+        // books.map((book) => shelves.none.books books;
+        this.setState({ shelves });
       });
     }
   };
+
   render() {
     return (
       <div className="search-books">
@@ -43,7 +51,7 @@ class SearchPage extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <BookList books={this.state.books} />
+          <BookView shelves={shelves} />
         </div>
       </div>
     );

@@ -3,41 +3,65 @@ import { getAll } from './BooksAPI';
 import BookListTitle from './BookListTitle';
 import BookShelf from './BookShelf';
 import { Link } from 'react-router-dom';
+import { update } from './BooksAPI';
+import PropTypes from 'prop-types';
 
 class BookView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shelves: {
-        currentlyReading: { title: 'Currently Reading', books: [] },
-        wantToRead: { title: 'Want To Read', books: [] },
-        read: { title: 'Read', books: [] }
-      }
+      shelves: props.shelves
     };
   }
 
   componentDidMount() {
     getAll().then(books => {
       const shelves = this.state.shelves;
-      books.map(book => shelves[book.shelf].books.push(book));
+      console.dir(books);
+      books.map(book => {
+        if (shelves[book.shelf]) {
+          shelves[book.shelf].books.push(book);
+        }
+      });
       this.setState({ shelves });
     });
   }
 
-  moveBook = (bookId, fromShelf, toShelf) => {
-    let shelves = this.state.shelves;
-    const bookIdx = shelves[fromShelf].books.findIndex(
-      book => book.id === bookId
-    );
-    shelves[toShelf].books.push(shelves[fromShelf].books[bookIdx]);
-    console.log('Now have', shelves[toShelf].books);
+  /*
+   Book is being moved to another shelf
+   Save the change and update view
+  */
+  moveBook = (book, fromShelfName, toShelfName) => {
+    const shelves = this.state.shelves;
 
-    shelves[fromShelf].books = shelves[fromShelf].books.filter(
-      book => book.id !== bookId
-    );
-    console.log('shelves!!', shelves);
+    const reassignShelf = (book, fromShelfName, toShelfName) => {
+      const fromShelf = shelves[fromShelfName];
+      const toShelf = shelves[toShelfName];
+      // Add book to new shelf
+      if (toShelf) {
+        book.shelf = toShelfName;
+        toShelf.books.push(book);
+      }
+      // Remove book from old shelf
+      if (fromShelf) {
+        fromShelf.books = fromShelf.books.filter(b => b.id !== book.id);
+      }
+    };
+
+    reassignShelf(book, fromShelfName, toShelfName);
+
+    // Update the state OPTIMISTICALLY
+    // and handle undo on fail
     this.setState({ shelves });
-    console.log(`move book ${bookId} from ${fromShelf} to ${toShelf}`);
+    update(book, toShelfName).then(
+      success => {},
+      failure => {
+        window.alert('Oops! Failed to update on server, undoing...', failure);
+        // Undo by switching book back to original shelf
+        reassignShelf(book, toShelfName, fromShelfName);
+        this.setState({ shelves });
+      }
+    );
   };
 
   render() {
@@ -64,5 +88,9 @@ class BookView extends React.Component {
     );
   }
 }
+
+BookView.propTypes = {
+  shelves: PropTypes.object.isRequired
+};
 
 export default BookView;

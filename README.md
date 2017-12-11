@@ -24,6 +24,10 @@ To get started developing right away:
     * BookList
       * Book
 
+## Extra Features
+
+* Optimistic Updates
+
 ## What You're Getting
 
 ```bash

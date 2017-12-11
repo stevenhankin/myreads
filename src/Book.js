@@ -1,25 +1,15 @@
 import React from 'react';
-import { update } from './BooksAPI';
 
 class Book extends React.Component {
   /*
   Book is a Controlled Component to handle state changes of the SELECT element
   See https://reactjs.org/docs/forms.html#the-select-tag
   */
-  constructor(props) {
-    super(props);
-    // this.state = {
-    //   selectedShelf: 'none'
-    // };
-  }
 
   handleChange = event => {
     const shelf = event.target.value;
     this.setState({ shelf });
-    update(this.props.book, shelf).then(() => {
-      console.log('updated!');
-      this.props.moveBook(this.props.book.id, this.props.book.shelf, shelf);
-    });
+    this.props.moveBook(this.props.book, this.props.book.shelf, shelf);
   };
 
   render() {
