@@ -4,31 +4,15 @@ import PropTypes from 'prop-types';
 
 function BookList(props) {
   let listItems;
-  // console.log('BOOKLIST', props.displayBooks);
-  /* Only display books once some are retrieved for the shelf */
-  if (props.displayBooks && props.displayBooks.length) {
-    // console.log('BookList', props.shelfFilter, props.displayBooks);
-    listItems = props.displayBooks
-      .filter(book => {
-        /* Only display books that are assigned to this shelf */
-        // let status = !book.shelf ||
-        let status =
-          !props.shelfFilter || book.shelf === props.shelfFilter ? true : false;
-        //
-        // if (book.id === '74XNzF_al3MC') {
-        //   console.log('book', book);
-        //   console.log('props.shelfFilter', props.shelfFilter);
-        //   console.log('book.shelf', book.shelf);
-        //   if (status) {
-        //     console.log('**** MATCH ****');
-        //   } else {
-        //     console.log('**** NOOO MATCH ****');
-        //   }
-        // }
 
-        // status = true;
-        return status;
-      })
+  // Only display books once some are retrieved for the shelf
+  if (props.displayBooks && props.displayBooks.length) {
+    listItems = props.displayBooks
+      .filter(
+        book =>
+          // Only display books that are assigned to this shelf
+          !props.shelfFilter || book.shelf === props.shelfFilter ? true : false
+      )
       .map(book => (
         <li key={book.id}>
           <Book
@@ -40,7 +24,6 @@ function BookList(props) {
           />
         </li>
       ));
-    // console.log(listItems);
   }
   return <ol className="books-grid">{listItems}</ol>;
 }

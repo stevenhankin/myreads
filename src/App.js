@@ -62,19 +62,13 @@ class BooksApp extends React.Component {
   Save the change and update view
   */
   moveBook = (book, fromShelfName, toShelfName) => {
-    console.log('moving', book);
-    console.log('fromShelfName', fromShelfName);
-    console.log('toShelfName', toShelfName);
-
     let shelfBooks = this.state.shelfBooks;
-    const shelfBookIndex = shelfBooks.findIndex(
-      b => (b.id === book.id ? true : false)
-    );
+    const shelfBookIndex = shelfBooks.findIndex(b => b.id === book.id);
     let shelfBook = shelfBooks[shelfBookIndex];
 
     if (!shelfBook) {
       shelfBook = book;
-      shelfBooks.push(book);
+      shelfBooks.push(shelfBook);
     } else if (toShelfName === 'none') {
       // Books removed from shelves are also removed from the state
       shelfBooks.splice(shelfBookIndex, 1);
@@ -82,10 +76,8 @@ class BooksApp extends React.Component {
 
     shelfBook.shelf = toShelfName;
 
-    console.log('Updating book', shelfBook);
     // Update the state OPTIMISTICALLY and handle undo on fail
     this.setState({ shelfBooks });
-    console.log('shelfBooks', this.state.shelfBooks);
     update(book, toShelfName).then(
       success => {},
       failure => {

@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class Book extends React.Component {
-  /*
-  Book is a Controlled Component to handle state changes of the SELECT element
-  See https://reactjs.org/docs/forms.html#the-select-tag
-  */
+  // Book is a Controlled Component to handle state changes of the SELECT
+  // element.  See https://reactjs.org/docs/forms.html#the-select-tag
 
   handleChange = event => {
     const shelf = event.target.value;

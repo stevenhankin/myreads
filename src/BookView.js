@@ -8,8 +8,6 @@ class BookView extends React.Component {
     super(props);
     this.whichShelf = props.whichShelf;
     this.moveBook = props.moveBook;
-
-    // console.log(props.shelfBooks);
   }
 
   render() {

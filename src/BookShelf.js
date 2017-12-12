@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class BookShelf extends React.Component {
   render() {
     let shelfTitle = null;
-    /* Conditional: No title is displayed for the Search Page */
+    // Conditional: No title is displayed for the Search Page
     if (this.props.shelfTitle) {
       shelfTitle = <h2 className="bookshelf-title">{this.props.shelfTitle}</h2>;
     }
