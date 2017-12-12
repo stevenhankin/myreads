@@ -1,28 +1,9 @@
 import React from 'react';
 import './App.css';
+import DefaultView from './DefaultView';
 import SearchPage from './SearchPage';
-import BookView from './BookView';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { getAll, update } from './BooksAPI';
-
-class DefaultView extends React.Component {
-  render() {
-    return (
-      <div>
-        <BookView
-          shelves={this.props.shelves}
-          shelfBooks={this.props.shelfBooks}
-          displayBooks={this.props.shelfBooks}
-          whichShelf={this.props.whichShelf}
-          moveBook={this.props.moveBook}
-        />
-        <div className="open-search">
-          <Link to="/search">Add a book</Link>
-        </div>
-      </div>
-    );
-  }
-}
 
 class BooksApp extends React.Component {
   shelves = [
@@ -37,6 +18,7 @@ class BooksApp extends React.Component {
   state = { shelfBooks: [] };
 
   componentDidMount() {
+    // Hydrate shelves with user's books
     getAll().then(shelfBooks => {
       if (shelfBooks.length > 0) {
         this.setState({ shelfBooks });
@@ -50,10 +32,8 @@ class BooksApp extends React.Component {
   and if exists return the shelf name
   */
   whichShelf = id => {
-    const matchedBook = this.state.shelfBooks.find(
-      b => (id === b.id ? true : false)
-    );
-    if (matchedBook) return matchedBook.shelf;
+    const matchedBook = this.state.shelfBooks.find(b => id === b.id);
+    if (matchedBook) return matchedBook.shelf || 'none';
     return 'none';
   };
 
@@ -65,26 +45,28 @@ class BooksApp extends React.Component {
     let shelfBooks = this.state.shelfBooks;
     const shelfBookIndex = shelfBooks.findIndex(b => b.id === book.id);
     let shelfBook = shelfBooks[shelfBookIndex];
-
     if (!shelfBook) {
       shelfBook = book;
       shelfBooks.push(shelfBook);
-    } else if (toShelfName === 'none') {
-      // Books removed from shelves are also removed from the state
-      shelfBooks.splice(shelfBookIndex, 1);
     }
-
     shelfBook.shelf = toShelfName;
-
     // Update the state OPTIMISTICALLY and handle undo on fail
     this.setState({ shelfBooks });
     update(book, toShelfName).then(
-      success => {},
+      success => {
+        if (toShelfName === 'none') {
+          // Books removed from shelves are also removed from the state
+          shelfBooks.splice(shelfBookIndex, 1);
+        }
+      },
       failure => {
-        window.alert('Oops! Failed to update on server, undoing...', failure);
         // Undo by switching book back to original shelf
-        shelfBook.shelf = fromShelfName;
+        shelfBook.shelf = fromShelfName || 'none';
         this.setState({ shelfBooks });
+        window.alert(
+          'Oops! Failed to update server, please try again later...',
+          failure
+        );
       }
     );
   };

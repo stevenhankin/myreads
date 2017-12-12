@@ -2,27 +2,25 @@ import React from 'react';
 import BookList from './BookList';
 import PropTypes from 'prop-types';
 
-class BookShelf extends React.Component {
-  render() {
-    let shelfTitle = null;
-    // Conditional: No title is displayed for the Search Page
-    if (this.props.shelfTitle) {
-      shelfTitle = <h2 className="bookshelf-title">{this.props.shelfTitle}</h2>;
-    }
-    return (
-      <div className="bookshelf">
-        {shelfTitle}
-        <div className="bookshelf-books">
-          <BookList
-            shelfFilter={this.props.shelfFilter}
-            displayBooks={this.props.displayBooks}
-            moveBook={this.props.moveBook}
-            whichShelf={this.props.whichShelf}
-          />
-        </div>
-      </div>
-    );
+function BookShelf(props) {
+  let shelfTitle = null;
+  // Conditional: No title is displayed for the Search Page
+  if (props.shelfTitle) {
+    shelfTitle = <h2 className="bookshelf-title">{props.shelfTitle}</h2>;
   }
+  return (
+    <div className="bookshelf">
+      {shelfTitle}
+      <div className="bookshelf-books">
+        <BookList
+          shelfFilter={props.shelfFilter}
+          displayBooks={props.displayBooks}
+          moveBook={props.moveBook}
+          whichShelf={props.whichShelf}
+        />
+      </div>
+    </div>
+  );
 }
 
 BookShelf.propTypes = {

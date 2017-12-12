@@ -8,6 +8,8 @@ class SearchPage extends React.Component {
   SearchPage is a Controlled Component
   */
   state = { searchText: '', searchBooks: [] };
+  // No title is required for the shelf on the Search Page
+  // Additionally, this means the shelf does not need to filter the books
   shelves = [{ title: null, shelfFilter: null }];
 
   handleChange = event => {
