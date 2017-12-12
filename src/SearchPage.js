@@ -1,27 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import BookList from './BookList';
 import BookView from './BookView';
-import { search } from './BooksAPI';
-
-const shelves = [{ title: 'Library', shelfFilter: undefined, books: [] }];
+import { search, getAll } from './BooksAPI';
 
 class SearchPage extends React.Component {
   /*
   SearchPage is a Controlled Component
   */
-  state = { searchText: '', shelves, books: [] };
+  state = { searchText: '', searchBooks: [] };
+
+  shelves = [{ title: null, shelfFilter: null }];
+
+  componentDidMount() {
+    getAll().then(shelfBooks => {
+      if (shelfBooks.length > 0) {
+        this.setState({ shelfBooks });
+      }
+    });
+  }
 
   handleChange = event => {
     const newText = event.target.value.trim();
     this.setState({ searchText: newText });
     if (newText.length > 0) {
-      search(newText).then(books => {
-        // books.map((book) => shelves.none.books books;
-        if (books.length > 0) {
-          // shelves[0].books = books;
-          this.setState({ books });
-          console.log('state', this.state);
+      search(newText).then(searchBooks => {
+        if (searchBooks.length > 0) {
+          this.setState({ searchBooks });
         }
       });
     }
@@ -52,7 +56,13 @@ class SearchPage extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <BookView shelves={this.state.shelves} books={this.state.books} />
+          <BookView
+            shelves={this.shelves}
+            shelfBooks={this.props.shelfBooks}
+            displayBooks={this.state.searchBooks}
+            whichShelf={this.props.whichShelf}
+            moveBook={this.props.moveBook}
+          />
         </div>
       </div>
     );

@@ -13,11 +13,6 @@ class Book extends React.Component {
     this.props.moveBook(this.props.book, this.props.book.shelf, shelf);
   };
 
-  getShelf = event => {
-    console.log('getShelf', this.props.book.shelf);
-    return this.props.book.shelf;
-  };
-
   render() {
     const formatUrl = book =>
       book.imageLinks && `url("${encodeURI(book.imageLinks.thumbnail)}")`;
@@ -33,7 +28,10 @@ class Book extends React.Component {
             }}
           />
           <div className="book-shelf-changer">
-            <select value={this.getShelf} onChange={this.handleChange}>
+            <select
+              value={this.props.whichShelf(this.props.book.id)}
+              onChange={this.handleChange}
+            >
               <option value="none" disabled>
                 Move to...
               </option>
@@ -57,7 +55,8 @@ Book.propTypes = {
   book: PropTypes.object.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  moveBook: PropTypes.func.isRequired
+  moveBook: PropTypes.func.isRequired,
+  whichShelf: PropTypes.func.isRequired
 };
 
 export default Book;
