@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import BookView from './BookView';
-import { search, getAll } from './BooksAPI';
+import { search } from './BooksAPI';
 
 class SearchPage extends React.Component {
   /*
@@ -10,14 +10,6 @@ class SearchPage extends React.Component {
   state = { searchText: '', searchBooks: [] };
 
   shelves = [{ title: null, shelfFilter: null }];
-
-  componentDidMount() {
-    getAll().then(shelfBooks => {
-      if (shelfBooks.length > 0) {
-        this.setState({ shelfBooks });
-      }
-    });
-  }
 
   handleChange = event => {
     const newText = event.target.value.trim();

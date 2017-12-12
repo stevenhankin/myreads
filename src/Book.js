@@ -9,7 +9,6 @@ class Book extends React.Component {
 
   handleChange = event => {
     const shelf = event.target.value;
-    this.setState({ shelf });
     this.props.moveBook(this.props.book, this.props.book.shelf, shelf);
   };
 
