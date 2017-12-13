@@ -12,18 +12,20 @@ const formatUrl = book =>
 function Book(props) {
   // Book is a Controlled Component to handle state changes of the SELECT
   // element.  See https://reactjs.org/docs/forms.html#the-select-tag
+  let book = props.book;
+
   return (
     <div className="book">
       <div className="book-top">
         <div
           className="book-cover"
           style={{
-            backgroundImage: formatUrl(props.book)
+            backgroundImage: formatUrl(book)
           }}
         />
         <div className="book-shelf-changer">
           <select
-            value={props.whichShelf(props.book.id)}
+            value={props.whichShelf(book.id)}
             onChange={e => handleChange(e, props)}
           >
             <option value="none" disabled>
@@ -36,9 +38,9 @@ function Book(props) {
           </select>
         </div>
       </div>
-      <div className="book-title">{props.book.title}</div>
+      <div className="book-title">{book.title}</div>
       <div className="book-authors">
-        {props.book.authors && props.book.authors.join(', ')}
+        {book.authors ? book.authors.join(', ') : ''}
       </div>
     </div>
   );
