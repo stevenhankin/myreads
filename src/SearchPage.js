@@ -15,12 +15,23 @@ class SearchPage extends React.Component {
   handleChange = event => {
     const newText = event.target.value;
     this.setState({ searchText: newText });
-    if (newText.length > 0) {
-      search(newText.trim()).then(searchBooks => {
-        if (searchBooks.length > 0) {
-          this.setState({ searchBooks });
+    // Only search the database if a search string is supplied
+    if (newText.trim().length > 0) {
+      search(newText.trim()).then(
+        newSearchBooks => {
+          this.setState({
+            searchBooks: newSearchBooks
+              ? newSearchBooks.hasOwnProperty('error') ? [] : newSearchBooks
+              : []
+          });
+        },
+        () => {
+          this.setState({ searchBooks: [] });
         }
-      });
+      );
+    } else {
+      // if empty search string then clear books
+      this.setState({ searchBooks: [] });
     }
   };
 
