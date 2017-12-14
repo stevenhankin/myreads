@@ -2,7 +2,8 @@ import React from 'react';
 import './App.css';
 import DefaultView from './DefaultView';
 import SearchPage from './SearchPage';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import NoMatch from './NoMatch';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { getAll, update as updateBook } from './BooksAPI';
 import update from 'immutability-helper';
 
@@ -86,30 +87,33 @@ class BooksApp extends React.Component {
     return (
       <Router>
         <div>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <DefaultView
-                component={DefaultView}
-                shelves={this.shelves}
-                shelfBooks={this.state.shelfBooks}
-                whichShelf={this.whichShelf}
-                moveBook={this.moveBook}
-              />
-            )}
-          />
-          <Route
-            path="/search"
-            render={() => (
-              <SearchPage
-                component={SearchPage}
-                shelfBooks={this.state.shelfBooks}
-                whichShelf={this.whichShelf}
-                moveBook={this.moveBook}
-              />
-            )}
-          />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <DefaultView
+                  component={DefaultView}
+                  shelves={this.shelves}
+                  shelfBooks={this.state.shelfBooks}
+                  whichShelf={this.whichShelf}
+                  moveBook={this.moveBook}
+                />
+              )}
+            />
+            <Route
+              path="/search"
+              render={() => (
+                <SearchPage
+                  component={SearchPage}
+                  shelfBooks={this.state.shelfBooks}
+                  whichShelf={this.whichShelf}
+                  moveBook={this.moveBook}
+                />
+              )}
+            />
+            <Route component={NoMatch} />
+          </Switch>
         </div>
       </Router>
     );
