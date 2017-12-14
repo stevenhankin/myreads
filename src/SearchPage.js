@@ -13,10 +13,10 @@ class SearchPage extends React.Component {
   shelves = [{ title: null, shelfFilter: null }];
 
   handleChange = event => {
-    const newText = event.target.value.trim();
+    const newText = event.target.value;
     this.setState({ searchText: newText });
     if (newText.length > 0) {
-      search(newText).then(searchBooks => {
+      search(newText.trim()).then(searchBooks => {
         if (searchBooks.length > 0) {
           this.setState({ searchBooks });
         }
