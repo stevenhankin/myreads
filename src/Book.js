@@ -7,7 +7,9 @@ const handleChange = (event, props) => {
 };
 
 const formatUrl = book =>
-  book.imageLinks && `url("${encodeURI(book.imageLinks.thumbnail)}")`;
+  book.imageLinks
+    ? `url("${encodeURI(book.imageLinks.thumbnail)}")`
+    : 'url("http://via.placeholder.com/128x193?text=No%20Cover")';
 
 function Book(props) {
   // Book is a Controlled Component to handle state changes of the SELECT
